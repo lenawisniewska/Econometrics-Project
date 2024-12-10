@@ -1,0 +1,453 @@
+\documentclass[12pt]{article}
+\usepackage{setspace}
+\usepackage{geometry}
+\usepackage{multicol}
+\usepackage{tabularx}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{amsmath} % for mathematical symbols and environments
+\usepackage{float}% If comment this, figure moves to Page 2
+\usepackage{lipsum}
+\usepackage{array} % Required for customizing row spacing
+\geometry{left=0.5in,right=0.5in,top=0.5in,bottom=0.5in}
+\onehalfspacing
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.3em}
+
+\makeatletter
+\renewcommand{\maketitle}{
+  \begin{flushleft}
+    {\huge \@author} \par
+      \end{flushleft}
+      \vspace{5cm}
+      {\Huge\bfseries\centering PART IIA - PAPER 3 PROJECT} \par
+         \vspace{2cm}
+    {\Huge\bfseries\centering \@title} \par
+{\Large Population aging presents a myriad of challenges for the labour market and the economy as a whole. Specifically, the persistent upward trends in the proportion of retirees and in the old-age dependency ratio (the number of persons aged 65 and over divided by the number of persons aged 15-64) is likely to create downward pressure on economic growth. Using the data provided for OECD countries and related publications, and any other sources you wish to introduce, examine labour markets outcomes of older workers and their influence of average incomes.}}
+\makeatother
+
+\title{3. The effects of aging on the economies of OECD countries}
+\author{2950D}
+
+\begin{document}
+
+\maketitle
+
+\vspace{6cm} 
+1988 words (7 tables, 1 figure) \par
+\vspace{0.5cm}
+Plagiarism Declaration \par
+I confirm that this is entirely my own work and has not previously been submitted for assessment, and I have read and understood the University’s and Faculty’s definition of Plagiarism.
+
+\newpage
+
+\section{Introduction}
+As life expectancy rises and fertility rates fall in developed economies, the impact of an ageing society on per capita (pc) output is becoming a concern. While it is increasingly a policy objective to counteract this by raising the effective retirement age (Martin, 2018), there is a surprising lack of research about the effect this would have on GDP pc. This report uses OECD data from 1991 to 2022 to understand this association, finding a significant positive effect of retirement age on GDP pc using First Differences and Fixed Effects, but not when using Arellano-Bond. It also analyses the factors that shape differences in effective retirement age, which is crucial if policy is to attempt to increase the age at which people retire. I thus find that average level of education is insignificant, whereas sectoral composition is significant: higher employment in industry relative to any other sector is associated with a higher effective average retirement age.
+
+\newpage
+\section{Literature Review}
+Table 1: Literature Review
+\renewcommand{\arraystretch}{1.5}
+\begin{table}[htbp]
+\small
+\begin{tabularx}{\linewidth}{>{\raggedright}p{1in} X}
+\hline
+\textbf{Reference} & \textbf{Summary} \\ % Make column headings bold
+\hline
+\multicolumn{2}{c}{Retirement and the Economy} \\
+Martin (2018) & Argues that to offset the effects of ageing society, we need a higher employment rate among older workers. Workers with a lower level of education tend to retire earlier, on average. OECD data for 1997-2011 suggest that rising employment of older workers wasn’t at the expense of youth. Rising employment of older workers since the late 1990s has been the result of higher retention, not hiring rates. Policy measures can address both.\\
+Auer and Fortuny (2000) & Discuss the negative effects of an ageing society, especially for public finance. Argue that widespread early retirement, a trend in the decades preceding 2000, is unjustified if older workers maintain/develop skills and remain healthy. Policy measures need to tackle the pressure on budget deficit and be mindful of the trade-off between youth and older-worker employment. \\
+\multicolumn{2}{c}{Age Structure} \\
+Lindh and Malmberg (1999) & Use pooled and panel regressions to analyse the effect of age structure on GDP per capita growth rates in OECD countries between 1950-90. Conclude that there is a positive correlation between share of 50-64 year-olds and growth in the following period, and a negative correlation between share of 65+ year-olds and growth the following period. Suggest human capital as the explanation.\\
+Maestas et al. (2016) & Use an IV model to estimate the impact of ageing population on GDP pc growth rates in the USA between 1980-2010. Find that a 10\% increase in the population share of the 60+ age group (2.4 pp) is associated with a 5.5\% GDP p.c. decrease. Two thirds of the decrease are explained by reduced labour productivity growth. The productivity slowdown is found to be matched by a wage growth decrease. \\
+Feyrer (2007) & Uses a first difference model to estimate the correlation between growth rate of output, productivity, human capital, and physical capital (dependent) and proportion of workforce by age group and dependency ratio (independent). Finds that the 40-50 age group has a positive effect on growth and productivity, and the 15-39 and 50+ a negative. \\
+\multicolumn{2}{c}{Determinants of Retirement Age} \\
+Chybalski (2022) & Uses fixed and random effects on a panel data sample for 21 countries between 2008-14. Finds that cross-country differences in average effective retirement age are associated with population distribution across occupational groups, which confirms previous micro studies. The results hold with various controls.\\
+Bernal and Vermeulen (2014) & Use panel data to examine the impact of an increase in the legal retirement age on the effective retirement age. Estimate the impact of a gradual increase from 65 to 67 is associated with a 1 month increase, whereas an immediate increase would be associated with a 7 month increase in effective retirement age.\\
+\hline
+\end{tabularx}
+\end{table}
+
+\newpage
+\section{Data}
+Table 2: List of variables. Note d(variable name) in the later regressions refers to differences. The source for all the data is the OECD database, which contains data by year and country. My sample size is limited by data availability: there are fewer data points for late-joiners to the OECD. This may lead to biased/inconsistent estimates if data is missing non-randomly for some values of the dependent variable.
+
+\renewcommand{\arraystretch}{1.5}
+\begin{table}[htbp]
+\small
+\begin{tabularx}{\linewidth}{p{0.6in} X p{0.75in} p{0.75in} p{0.75in} p{0.75in}}
+\hline
+\textbf{Variable} & \textbf{Description} & \textbf{Mean} & \textbf{Std Dev} & \textbf{Min} & \textbf{Max} \\ 
+\hline
+gdppc* & GDP per capita in USD constant prices 2015 PPP & 35942.41 & 17295.44 & 8000.237 & 114804.6\\
+retage & Average effective retirement age & 61.852 & 2.8 & 55.1 & 70.75 \\
+govdebt & Total central government debt as a percentage of GDP & 46.7567 & 31.26088 & .821 & 183.53\\
+lfpr & Labour force participation rate in percent & 61.58556 & 6.359523  & 46.23847 & 82.2047\\
+depratio & Old-age dependency ratio: population above 65 years divided by population between 15 and 64 & .2202116 & .0690031 & .0738977 & .4883019\\
+educ & Share of population aged 25-64 with at least upper secondary education in percent & 71.29051 & 19.36912 & 13.61857 & 94.44542\\
+prod** & GDP per hour worked (a measure of labour productivity) & 46.20473 & 19.88566 & 9.482174 & 131.5734\\
+lfpr6569 & Labour force participation rate for 65-69 age group in percent & 19.56013 & 13.38287 & -5.547943 & 66.70082\\
+emp\_indus & Percentage of employed population that is employed in industry & 21.04156 & 4.280221 & 7.498445 & 32.31955\\
+emp\_agri & Percentage of employed population that is employed in agriculture & 4.793993 & 3.872426 & .6952906 & 20.452\\
+emp\_manu & Percentage of employed population that is employed in manufacturing & 13.24556 & 3.858469 & 2.924704  & 23.73372\\
+emp\_serv & Percentage of employed population that is employed in services & 60.91889 & 9.494234 & 38.043 & 88.56565\\
+wage & Average real wage in 2022 constant prices at 2022 USD PPPs & 41772.05 & 15857.28 & 10186 & 79476\\
+\hline
+\end{tabularx}
+\end{table}
+
+*I use log (\textit{lgdppc}) in regressions to measure percentage change in GDP.
+
+**Dropped in final model.
+
+***I use log (\textit{lwage}) in regressions.
+
+\newpage
+\subsection{Data Visualisation}
+
+\begin{figure}[!htb]  
+\centering
+  \includegraphics[width=1\textwidth]{finalgraph.jpg}
+  \caption{Percentage change in GDP pc and in effective retirement age for selected OECD countries. As shown, there is an association between percentage change in GDP pc and in effective retirement age. Section 4 verifies whether this persists when controls are added.}
+  \label{fig:example}
+\end{figure}
+
+\newpage
+\section{Association between age of retirement and GDP pc}
+I use panel data to asses the impact of effective retirement age on GDP pc. I have chosen to focus on GDP pc, not real wages. This allows me to better isolate the effect on aggregate output of retirement. With real wages, the estimated effect would also include the upward pressure on wages stemming from lower labour supply. Additionally, I focus on effective retirement age (not measures of age structure) as the key independent variable for 2 reasons: (1) the outcomes of changing age structure are well-documented (Lindh and Malmberg, 1999; Feyrer, 2007; Maestas et al., 2016), (2) ageing is more difficult to control with policy than retirement (today's fertility changes will impact working population in 20 years).
+
+\subsection{Model and methodology}
+\textbf{Channels:}
+There are 3 main channels through which retirement could influence GDP pc: (1) labour force, (2) public finance, and (3) productivity. (1) workers retiring earlier leads to a smaller workforce, thus decreasing output per member of the population. (2) as Auer and Fortuny (2000) emphasize, earlier retirement increases the burden on public finance (which takes funds away from e.g. investment). (3) workers retiring earlier leads to a lower average number of years of experience and potentially less knowledge exchange between more and less experienced workers.
+
+\textbf{Controls:}
+In my model, I compare the coefficient on \textit{retage} when controlling and not controlling for \textit{govdebt} (proxy for channel (2)) and \textit{lfpr} (proxy for channel (1)). I was not able to control for channel (3): the only available OECD measure is GDP per hour worked, but this leads to an over-fitted model. I hence omitted it in the final model. If \textit{retage} is found to be significant without the controls, but insignificant with them, this suggests that it likely impacts \textit{gdppc} through these channels. I also control for dependency ratio, education, and year. The former is a demographic measure and hence proxy for age structure. Controlling for it allows me to isolate the effect of the \textit{choice} to retire, which is key for policy. Education is not time-invariant and thus not eliminated by FD and FE, hence I control for it to avoid omitted variable bias. I control for year fixed effects to account for unobserved shocks. 
+
+I run each of the below (i) with all controls and (ii) without \textit{govdebt} and \textit{lfpr}. Year dummy variables are omitted from equations for brevity.
+
+(A1) is a pooled OLS model, where a country in two periods is treated like two different countries. However, there are likely unobserved fixed country effects (e.g. cultural factors), which violates the Gauss-Markov assumption of exogenous errors and leads to biased and inconsistent estimators. A1.i equation:
+\begin{equation}
+gdppc_{it} = \beta_0 + \beta_1 retage_{it}+ \beta_2 govdebt_{it} + \beta_3 lfpr_{it} + \beta_4 depratio_{it} + \beta_5 educ_{it} + \alpha_{i} + \epsilon_{it}
+\end{equation}
+
+Where \( \mathrm{\alpha}_i \) are fixed effects and \( \mathrm{\epsilon}_{it} \) are idiosyncratic errors.
+
+(A2) is a first-differenced (FD) estimator. This solves the issue of fixed country effects, but I still control for time-variant characteristics. It is more efficient than (3) if there is serial correlation of idiosyncratic errors (as is shown to be the case in Section 4.3). A2.i equation:
+
+\begin{equation}
+dgdppc_{it} = \delta_0 + \beta_1 dretage_{it}+ \beta_2 dgovdebt_{it} + \beta_3 dlfpr_{it} + \beta_4 ddepratio_{it} + \beta_5 deduc_{it} + d\epsilon_{it}
+\end{equation}
+
+(A3) is a fixed-effects (FE) estimator. It also eliminates fixed effects. It would be more efficient than (2) if there was no serial correlation of idiosyncratic errors. A3.i equation: (tilde signifies a demeaned variable)
+
+\begin{equation}
+\widetilde{gdppc_{it}} = \gamma_0 + \beta_1 \widetilde{retage_{it}} + \beta_2 \widetilde{govdebt_{it}} + \beta_3 \widetilde{lfpr_{it}} + \beta_4 \widetilde{depratio_{it}} + \beta_5 \widetilde{educ_{it}} + \widetilde{\epsilon_{it}}
+\end{equation}
+
+Both (2) and (3) require strict exogeneity to be consistent, but this may be violated as past \textit{gdppc} may affect the choice to retire (which affects \textit{retage}). 
+
+(A4) is the Arellano-Bond method, a 2SLS IV for panel data where the endogenous variable is \textit{dretage} and the instrument is a deeper lag of \textit{retage}. This reduces the number of observations but addresses the problem of endogeneity in (2) and (3). 
+
+\newpage
+\newgeometry{left=0.2in, right=0.2in, top=0.5in, bottom=0.5in}
+\subsection{Results}
+Table 3: Regression results table excluding time dummy variables and constant terms
+
+* p\textless0.05, ** p\textless0.01, *** p\textless0.001
+\begin{table}[htbp]
+\small
+\begin{tabularx}{\linewidth}{p{0.4in} *{8}{>{\raggedright\arraybackslash}X}}
+\toprule
+& \textbf{POLS A1.i gdppc} & \textbf{POLS A1.ii gdppc} & \textbf{FD \newline A2.i dgdppc} & \textbf{FD \newline A2.ii dgdppc} & \textbf{FE \newline A3.i gdppc} & \textbf{FE \newline A3.ii gdppc} & \textbf{A-B \newline A4.i gdppc} & \textbf{A-B \newline A4.ii gdppc}\\ 
+\midrule
+retage & 0.0248** (3.09) & 0.0216*** (3.34) & & & 0.00844 (0.83) & \textbf{ 0.0201* (2.52)} & 0.00141 (0.28) & 0.000346 (0.14) \\ govdebt & -0.000677 (-0.76) & & & & -0.000365 (-0.44) & & -0.00135*** (-4.90)&\\
+lfpr & 0.0126*** (5.03) & & & & 0.00129 (0.35) & & -0.00431* (-2.13) & \\
+depratio & 3.913*** (11.29) & 2.549*** (10.57) & & & -1.071 (-1.26) & -0.498 (-0.46) & 0.267 (0.50) & 0.325* (1.96) \\
+educ & 0.00224** (2.76) & 0.00644*** (11.11) & & & 0.00487 (2.03) & -0.00179 (-0.42) & 0.00223 (1.49) & 0.000424 (0.45) \\
+dretage & & & 0.00307 (1.12) & \textbf{0.00498* (2.39)} & & & & \\
+dgovdebt & & & -0.00332*** (-10.06) & & & & & \\
+dlfpr & & & -0.000312 (-0.33) & & & & & \\
+ddepratio & & & 0.198 (0.35) & -0.563 (-1.69) & & & & \\
+deduc & & & -0.00108 (-0.76) & -0.00165 (-1.73) & & & & \\
+N & 444 & 928 & 378 & 849 & 444 & 928 & 367 & 835 \\
+\( \mathrm{R}^2 \) & 0.4271 & 0.3296 & 0.2817 & 0.0143 & 0.8037 (within) & 0.6872 (within) & & \\
+\hline
+\end{tabularx}
+\end{table}
+\restoregeometry
+
+Table 3 shows estimated coefficients from all 4 models. POLS shows that all coefficients except for \textit{govdebt} are significant, unlike the other models, suggesting that country fixed effects are responsible for this. In FD and FE, we see that \textit{retage} is insignificant when we control for \textit{lfpr} and \textit{govdebt}, but significant and positive without these controls. Specifically, the FD estimator, which is more efficient than FE for our data, would suggest that a one year increase in effective \textit{retage} is associated with a 0.498\% increase in \textit{gdppc}. When only one channel is omitted, \textit{retage} remains insignificant, suggesting that the effect is via both channels. The effect being positive makes sense given that higher \textit{retage} leads to larger labour force and a smaller burden on public finance.
+
+However, we should avoid a causal interpretation as there is a risk of simultaneity (\textit{gdppc} also impacting \textit{retage}), which would violate the strict exogeneity assumption of FD and FE. Arellano-Bond, which corrects for this using 2SLS with lagged values as the instrument, thus shows that \textit{retage} is insignificant whether with or without the controls. 
+
+Additionally, the \textit{govdebt} coefficient is negative as expected. What's surprising is the coefficient on \textit{lfpr} is \textit{negative} and significant: to understand this, we'd have to look deeper into age composition, as the literature suggests labour force participation of some age groups has a positive effect on output, and of others - a negative (Feyrer, 2017). Time dummies have been omitted from the table, but they are found to be jointly significant for all but POLS, suggesting there is a time trend.
+
+\newpage
+\section{Determinants of effective retirement age and labour force participation of older workers}
+Having determined that FD and FE suggest there to be a positive association between higher effective retirement age and GDP pc, in this section I investigate the determinants of effective retirement age. While ideally I'd like to run a regression on a dataset of individuals across time (to analyse how their occupation, education etc. influence the choice to retire), individual-level data is not available. Even analysing age groups separately is not possible as some key data is only available in aggregate (employment by sector). Hence, I continue with cross-country analysis using panel data.
+
+\subsection{Model and Methodology}
+\textbf{Channels:} The literature mentions at least three factors influencing the choice to retire: (1) statutory retirement age, (2) level of education and socioeconomic status (Martin, 2018), (3) sector/occupation (Chybalski, 2022). I omit (1) because of lacking data and complexity of retirement policy across time (e.g. statutory age differs by gender, retirement is compulsory or optional etc.). It has also already been studied (see Bernal and Vermeulen, 2014 in Section 2). I used \textit{educ} to measure channel (2) and found it to be insignificant for \textit{retage} and \textit{lfpr6569} given controls. Therefore, I focus only on channel (3) below, using \textit{emp\_indus}, \textit{emp\_agri}, \textit{emp\_manu}, and \textit{emp\_serv}. I keep education as a control but do not report its coefficient.
+
+\textbf{Controls:} I control for \textit{depratio} because I aim to measure the \textit{choice} to retire, \textit{given} age structure. I also control for real wages via \textit{lwage}, as this variable is time-variant and may influence the choice to retire. While this increases the risk of reverse causality, using an IV (Arellano-Bond method) deals with this issue.
+
+\textbf{Choice of model:} Given fixed country effects, POLS will likely be biased and inconsistent. FD and FE require strict exogeneity to be consistent, but this is also likely violated due to simultaneity: for instance, a change in \textit{retage} can impact sectoral composition if the age structure of employees is not the same across sectors. Hence, only Arellano-Bond, the 2SLS method for panel data, will produce consistent estimates. I thus use only this method below. 
+
+\textbf{Dependent variables:} (B1) uses \textit{retage} as the dependent variable, and (B2) uses \textit{lfpr6569}. I would expect to obtain similar results as, ceterus paribus, higher retirement age should be associated with higher labour force participation rate of older workers. While I would prefer an lfpr for all workers above 60, this is only available in the OECD database for a very limited sample of countries/years. 
+
+As I focus on the sectoral composition channel, I want to find how movements between sectors relate to the choice to retire. In any regression, I have to omit one sector variable to avoid perfect collinearity. The resulting coefficients then tell us how \textit{retage} or \textit{lfpr6569} changes if 1\% of the employed population moves from the omitted sector to the regressor sector. Hence, I run 4 regressions, omitting each sector in turn, and present this in matrix form below. For instance, the equation that omits \textit{emp\_indus} is:
+\begin{equation}
+retage_{it} = \beta_0 + \beta_1 emp\_agri_{it} + \beta_2 emp\_serv_{it} + \beta_3 emp\_manu_{it} + \beta_4 educ_{it} + \beta_5 depratio_{it} + \beta_6 lwage_{it} + u_{it}
+\end{equation}
+
+\newpage
+\subsection{Results}
+Table 4: (B1) regression results table (excluding controls and constant terms). Coefficients show the expected increase in \textit{retage} associated with 1\% of population moving from column sector to row sector. As expected, the negative of the transpose of the matrix is equal to itself.
+
+* p\textless0.05, ** p\textless0.01, *** p\textless0.001
+\begin{table}[htbp]
+\small
+\begin{tabularx}{\linewidth}{p{1in} *{4}{>{\raggedright\arraybackslash}X}}
+\toprule
+& \textbf{emp\_indus} & \textbf{emp\_agri} & \textbf{emp\_manu} & \textbf{emp\_serv}\\ 
+\midrule
+\textbf{emp\_indus} & & \textbf{0.215** (2.77)} & \textbf{ 0.175* (2.35)} & \textbf{0.0840* (2.52)}\\
+\textbf{emp\_agri} & \textbf{-0.215** (-2.77)} &  & -0.0401 (-0.52) & -0.131 (-1.67)\\
+\textbf{emp\_manu} & \textbf{-0.175* (-2.35)} & 0.0401 (0.52) &  & -0.0911 (-1.67)\\
+\textbf{emp\_serv} & \textbf{-0.0840* (-2.52)} & 0.131 (1.67) & 0.0911 (1.67) & \\
+\hline
+\end{tabularx}
+\end{table}
+
+Here I present and analyse results only for (B1). While the signs of the coefficients are similar in (B2), they are neither individually nor jointly significant. This could be because \textit{lfpr6569} is not a perfect measure of labour force participation of 'older workers,' as this should ideally also include some workers under 65 (e.g. those above 60) and those above 69. 
+
+The results above suggest that only employment in industry is significantly (positively) associated with effective retirement age. The coefficient on \textit{emp\_indus} is positive and significant in all 3 equations, and in the equation which omits \textit{emp\_indus}, the 3 other employment variables are negative and separately and jointly significant. The model predicts that a move of 1\% of the employed population from agriculture to industry is associated with a predicted 2.5 month increase in \textit{retage}. For the same move from manufacturing to industry, the predicted effect is a 2.1 month increase, and for services - a 1 month increase. 
+
+This effect could be caused by higher \textit{retage} in industry relative to other sectors, although this need not be causal: it could be that individuals with some other characteristic that is associated with retiring late (gender, health, socioeconomic status) are overrepresented in industry. To be able to control for these, I would require individual-level data about occupation, socioeconomic status, health, gender, and retirement age.
+
+The results suggest that movements between the three other sectors - manufacturing, agriculture, and services - do not have a statistically significant effect on \textit{retage}.
+
+\newpage
+\newgeometry{left=0.2in, right=0.2in, top=0.5in, bottom=0.5in}
+\section{Diagnostic tests}
+Table 5: Diagnostic Tests
+\renewcommand{\arraystretch}{1.5}
+\begin{table}[htbp]
+\footnotesize
+\begin{tabularx}{\linewidth}{>{\raggedright}p{1in} >{\raggedright}p{0.7in} >{\raggedright}p{1in} >{\raggedright}p{2.1in} X}
+\hline
+\textbf{Testing} & \textbf{Test} & \textbf{\( \mathrm{H}_0 \)} & \textbf{P-value} & \textbf{Conclusion}\\ 
+\hline
+\multicolumn{5}{c}{Section 4} \\
+\hline
+Functional form misspecification & Ramsey RESET & Equation is well specified &
+A1.i: p=0.0000
+A1.ii: p=0.0000
+A2.i: p=0.1125
+A2.ii: p=0.5011
+A3.i: p=0.0000
+A3.ii: p=0.0002
+A4.i: p=0.0000
+A4.ii: p=0.0000 &  Reject \( \mathrm{H}_0 \)  for all except A2. A2 well specified. Evidence of functional misspecification in A1, A3, and A4. Requires cautious interpretation of results. \\
+Serial correlation & 
+Wooldridge test & No first-order correlation &
+A1.i: p=0.0000
+A1.ii: p=0.0000
+A2.i: p=0.8837
+A2.ii: p=0.0038
+A3.i: p=0.0000
+A3.ii: p=0.0000
+A4.i: p=0.0000
+A4.ii: p=0.0000 & Reject \( \mathrm{H}_0 \)  for all except A2.i. This means that FD is more efficient than FE. I used cluster-adjusted and robust standard errors. \\
+Heteroskedasticity & Breusch
+–Pagan test & Homoskedasticity (constant variance of error term) &
+A1.i: p=0.0000
+A1.ii: p=0.0000
+A2.i: p=0.0511
+A2.ii: p=0.0000
+A3.i: p=0.0000
+A3.ii: p=0.0000
+A4.i: p=0.0000
+A4.ii: p=0.0000 &  Reject \( \mathrm{H}_0 \) for all except A2.i. Suggests heteroskedasticity. I hence used cluster-adjusted and robust standard errors. \\
+Non-normality of errors & Shapiro-Wilk & Normally distributed residuals &
+A1.i: p=0.0000
+A1.ii: p=0.0000
+A2.i: p=0.0000
+A2.ii: p=0.0000
+A3.i: p=0.0000
+A3.ii: p=0.0000
+A4.i: p=0.0000
+A4.ii: p=0.0000 &  Reject \( \mathrm{H}_0 \). Errors are not normally distributed (but by CLT they are asymptotically normally distributed). \\
+Multicollinearity & Variance Inflation Factor & High degree if mean VIF \textgreater 10 & A1.i, A1.ii, A2.i, A2.ii: mean VIF \textless 3 & Suggests a lack of multicollinearity for A1 and A2 (cannot apply this test to A3 and A4). \\
+\hline
+\multicolumn{5}{c}{Section 5} \\
+\hline
+Functional form misspecification & Ramsey RESET & Equation is well specified &
+B1.i: p=0.8106
+B1.ii: p=0.5724 
+B1.iii: p=0.8109
+B1.iv: p=0.1181
+& Do not reject \( \mathrm{H}_0 \). No evidence of functional misspecification. \\
+Serial correlation & 
+Wooldridge test & No first-order correlation &
+B1.i: p=0.0000
+B1.ii: p=0.0000 
+B1.iii: p=0.0000
+B1.iv: p=0.0000
+& Reject \( \mathrm{H}_0 \). I use cluster-adjusted robust standard errors. \\
+Heteroskedasticity & Breusch
+–Pagan test & Homoskedasticity (constant variance of error term) &
+B1.i: p=0.0000
+B1.ii: p=0.0000 
+B1.iii: p=0.0000
+B1.iv: p=0.0000 &  Reject \( \mathrm{H}_0 \). I use cluster-adjusted robust standard errors. \\
+Non-normality of errors & Shapiro-Wilk & Normally distributed residuals & B1.i: p=0.0000
+B1.ii: p=0.0000 
+B1.iii: p=0.0000
+B1.iv: p=0.0000 &  Reject \( \mathrm{H}_0 \). Errors are not normally distributed (but by CLT they are asymptotically normally distributed). \\
+Multicollinearity & Variance Inflation Factor & High degree if mean VIF \textgreater 10 & - & Cannot apply to Arellano-Bond. I avoid perfect multicollinearity by always omitting one employment variable. \\
+\hline
+Unit Root & Levin-Lin-Chu & Panel contains unit root & - & Can’t test for A or B as data is not strongly balanced. \\
+\hline
+\end{tabularx}
+\end{table}
+
+\newpage
+\restoregeometry
+\newgeometry{left=0.2in, right=0.2in, top=0.5in, bottom=0.5in}
+\section{Policy Recommendations}
+Table 6: Policy Recommendations
+\renewcommand{\arraystretch}{1.5}
+\begin{table}[htbp]
+\footnotesize
+\begin{tabularx}{\linewidth}{>{\raggedright}p{1in} X}
+\hline
+\textbf{Aim} & \textbf{Justification and policy proposal}\\ % Make column headings bold
+\hline
+\multicolumn{2}{c}{Section 4} \\
+\hline
+Tackling public finance & It was found that if retirement age is significant for GDP pc, it operates through the government debt channel (and even if not, government debt is negatively associated with GDP pc). This channel could be tackled without actually raising the effective retirement age, by improving the deficit in other ways. This could include raising  other taxes, raising retirement contributions, lowering pensions or changing their structure. However, as Auer and Fortuny (2000) point out, these are not popular policies, especially given the sense of unfairness they create: new generations would have to work longer and pay larger contributions in order to get (smaller) pensions. \\
+Tackling labour force participation rate & The second channel through which retirement age may be impacting GDP pc is the labour force. While my regressions seem to suggest that a higher labour force participation rate is associated with lower GDP pc, the consensus in the literature is that higher employment is good for GDP pc (note employment and lfpr are not the same, which might explain my result; also age structure of the population plays a role, and potentially there are some omitted variables). To increase employment (and lfpr), policymakers could (1) try to raise the effective retirement age (see below) or (2) increase employment/labour market participation of \textit{younger} workers (which has the added benefit of alleviating youth unemployment, a persistent issue in e.g. Southern Europe). That said, both of these require for labour demand to be sustained or increased despite ageing and growth slowdown. \\
+\hline
+\multicolumn{2}{c}{Section 5} \\
+\hline
+Increasing average effective retirement age (given that it's effect on GDP pc is weakly positive) & Beyond just increasing the statutory retirement age, several factors should be considered. \newline
+\textbf{1. Sectoral Composition:} As discussed in Section 8 below, while employment in industry is positively associated with retirement age, we cannot be sure this is causal. Hence, the main conclusion from this research is that sectoral composition must be taken into account when new policies targeting retirement are implemented, as their efficacy may depend on the structure of the economy (Chybalski, 2022, makes a similar argument). \newline
+\textbf{2. Retention and Hiring:} Martin (2018) points out that rising employment of older workers in the 21st century has been due to higher retention, not hiring rates. To increase the latter, it may be necessary to reduce ageism in hiring via e.g. the use of data analytics, increase older workers' productivity through training (especially for digital skills), or reduce seniority pay premia to make older workers less costly.\newline
+\textbf{3. Part-time work:} for the purpose of this report, retirement was viewed as as black-and-white issue - either one is retired or one is not. However, older workers in some countries are incentivised to work part time while receiving (part of) their pension, or to otherwise gradually exit the labour force. These policies allow for transfer of experience from older to younger workers, alleviate the burden on public finance, and increase the size of the labour force.\\
+\hline
+\multicolumn{2}{c}{General} \\
+\hline
+Adapting to changing demand & As Nagarajan et al. (2016) note, an ageing population changes social preferences and demand for various goods and services. For instance, we will likely see rising demand for healthcare and care services. Investing in industries that are expected to grow as societies age may be a sensible development strategy. \\
+Preventing cognitive decline and social isolation & While this report focused on the impact of retirement age on GDP pc, there are other reasons to incentivise later retirement. There are cognitive benefits to working, such as skill maintenance and improvement. As Auer and Fortuny (2000) point out, productivity loss is not a necessary consequence of ageing, but rather could be remedied by lifelong learning. Preventing skill obsolescence through training programmes targeted at older workers is an increasingly popular policy. There is also the social/psychological aspect of workers feeling useful and having closer ties with society. Hence, beyond the strictly economic aspect, it is worthwhile to consider other benefits of employment of older workers. \\
+\hline
+\end{tabularx}
+\end{table}
+\restoregeometry
+
+\newpage
+\section{Limitations and Developments}
+Table 7: Limitations and Developments
+\renewcommand{\arraystretch}{1.5}
+\begin{table}[htbp]
+\small
+\begin{tabularx}{\linewidth}{>{\raggedright}p{1.2in} X}
+\hline
+\textbf{Limitation} & \textbf{Consequence and potential solution}\\ % Make column headings bold
+\hline
+\multicolumn{2}{c}{Section 4} \\
+\hline
+Ramsey RESET tests suggests functional form misspecification & I tried including square and cube terms but this failed to increase the p-value. In future could experiment with more exponent and interaction terms or log form.\\
+Cannot claim causality or exhaustiveness of the two channels & On the one hand, retirement age, if significant, may be acting through more than the two channels I consider. On the other hand, my regressions are not conclusive that the direction of causality is from retirement age to government debt (or labour force participation) to GDP pc (I only argue that this is plausible given my results). Additional IV regressions would have to be conducted to confirm this.\\
+Failed to control for level of government investment & This means that the coefficient on government debt may be biased downwards, if it is the case that some governments with large deficits invest a lot (and if investment raises GDP pc). In future should add an investment control. Note that government debt was not central to this analysis, as the focus is on the coefficient of effective retirement age.\\
+\hline
+\multicolumn{2}{c}{Section 5} \\
+\hline
+Analysis is at country-, not individual-level & This issue results in a loss of nuance in the analysis of factors influencing the choice to retire (and their interactions) and makes it difficult to claim causality. To solve this, a longitudinal study of individuals across several countries (so that pension policy differences could be accounted for) would be ideal.\\
+Limited data availability for policy measures & I was not able to find a dataset with historical data about pension policy across OECD countries. With enough time, it would be possible to research each of the OECD countries and create quantitative variables representing statutory retirement age across time for each gender and structure of pensions. This would allow one to verify Bernal and Vermeulen's (2014) national-level results about the impact of change in statutory retirement age on a cross-country level.\\
+Cannot indicate why industry sector associated with higher retirement age & My analysis showed that employment in industry is significantly positively associated with average effective retirement age. For this to be useful for policy, we'd need to know why this is the case. Is there a characteristic of jobs in industry that could be transferred to other sectors to increase employment? If yes, developed economies would likely be interested, given that the bulk of their labour forces are (and will likely remain) employed in services, not industry. It may, however, also be the case be that higher retirement age in industry stems from selection bias (i.e. people that are already likely to retire late are also more likely to work in industry). The use of individual-level data could help conclude which is true.\\
+\hline
+\end{tabularx}
+\end{table}
+\newpage
+\section{Conclusion}
+In conclusion, this report has analysed whether the choice to retire affects pc output and if so, how it can be influenced by policy. My results provide some insights, but are inconclusive. When endogeneity is eliminated via Arellano-Bond, the effect of retirement age on GDP pc is insignificant, but given how surprising this is, further research is justified. Given that FD and FE suggest a positive effect of later retirement, I then find that sectoral composition influences retirement age. However, to understand why this is the case and how it can be applied to policy, studies of individual-level data will be necessary. Overall, as ageing is not only progressing, but accelerating, successful policymakers will leverage research to use this to their advantage and foster economic development. 
+
+\newpage
+\section*{Bibliography}
+\hangindent=1em
+\hangafter=1
+Auer, P. and Fortuny, M. (2000) “Ageing of the labour force in OECD countries: economic and social consequences”, International Labour Office Employment Paper \par
+
+\hangindent=1em
+\hangafter=1
+Bloom, David E., et al. The Demographic Dividend: A New Perspective on the Economic Consequences of Population Change. Rand, 2003. \par
+
+\hangindent=1em
+\hangafter=1
+Bloom, David and Sousa-Poza, Alfonso. (2013). Ageing and Productivity: Introduction. SSRN Electronic Journal. 10.2139/ssrn.2219130.\par
+
+\hangindent=1em
+\hangafter=1
+Daniele, F., T. Honiden and A. Lembcke (2019), "Ageing and productivity growth in OECD regions: Combatting the economic impact of ageing through productivity growth?", OECD Regional Development Working Papers, No. 2019/08, OECD Publishing, Paris, https://doi.org/10.1787/9dcb3116-en. \par
+
+\hangindent=1em
+\hangafter=1
+Feyrer, James. “Demographics and productivity.” Review of Economics and Statistics, vol. 89, no. 1, Feb. 2007, pp. 100–109, https://doi.org/10.1162/rest.89.1.100. \par
+
+\hangindent=1em
+\hangafter=1
+Filip Chybalski, 2022. "Occupational composition of an economy and effective retirement age across European countries: an econometric analysis," Operations Research and Decisions, Wroclaw University of Science and Technology, Faculty of Management, vol. 32(3), pages 65-79.\par
+
+\hangindent=1em
+\hangafter=1
+Lindh, T., Malmberg, B. Age structure effects and growth in the OECD, 1950–1990. J Popul Econ 12, 431–449 (1999). https://doi.org/10.1007/s001480050107\par
+
+\hangindent=1em
+\hangafter=1
+Martin, John and Whitehouse, Edward. (2008). Reforming Retirement-Income Systems: Lessons from the Recent Experiences of OECD Countries. 10.1787/241083644101.\par
+
+\hangindent=1em
+\hangafter=1
+Martin, J. (2018) “Live longer, work longer: The changing nature of the labour market for older workers in OECD countries”, Institute for Labor Economics Discussion Paper\par
+
+\hangindent=1em
+\hangafter=1
+Maestas, Nicole, et al. The Effect of Population Aging on Economic Growth, the Labor Force and Productivity, July 2016, https://doi.org/10.3386/w22452. \par
+
+\hangindent=1em
+\hangafter=1
+Nagarajan, N. Renuga, Aurora A. C. Teixeira, and Sandra T. Silva. “The Impact of an Ageing Population on Economic Growth: An Exploratory Review of the Main Mechanisms.” Análise Social 51, no. 218 (2016): 4–35.  http://www.jstor.org/stable/43755167. \par
+
+\hangindent=1em
+\hangafter=1
+Noelia Bernal and Frederic Vermeulen, 2014. "The Impact of an Increase in the Legal Retirement Age on the Effective Retirement Age," De Economist, Springer, vol. 162(2), pages 115-145, June.\par
+
+\hangindent=1em
+\hangafter=1
+Rainer Kotschy, Uwe Sunde, Can education compensate the effect of population ageing on macroeconomic performance?, Economic Policy, Volume 33, Issue 96, October 2018, Pages 587–634, https://doi.org/10.1093/epolic/eiy011 \par
+
+\hangindent=1em
+\hangafter=1
+Sang-Hyop Lee, Andrew Mason, Who gains from the demographic dividend? Forecasting income by age, International Journal of Forecasting, Volume 23, Issue 4, 2007, Pages 603-619. \par
+
+\newpage
+\subsection*{Data Sources}
+1. OECD Statistics Database. Level of GDP per capita and productivity.
+
+2. OECD Statistics Database. Effective labour market exit age.
+
+3. OECD Statistics Database. Central Government Debt.
+
+4. OECD Statistics Database. LFS by sex and age.
+
+5. OECD Statistics Database. Educational attainment and labour-force status.
+
+6. OECD Statistics Database. Level of GDP per capita and productivity.
+
+7. OECD Statistics Database. Labour Force Survey: employment by economic activity.
+
+8. OECD Statistics Database. Average annual wages.
+
+\end{document}
