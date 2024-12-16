@@ -97,7 +97,7 @@ xtserial retage educ emp_manu emp_serv emp_agri deprat lwage
 reg retage educ emp_agri emp_serv emp_manu deprat lwage time_numeric
 estat hettest educ emp_agri emp_serv emp_manu deprat lwage time_numeric
 
-//non-normality of errors - Shapiro-Wilk
+//Shapiro-Wilk: non-normality of errors
 xtabond retage educ emp_agri emp_serv emp_manu deprat lwage time_numeric, vce(robust)
 swilk retage educ emp_agri emp_serv emp_manu deprat lwage time_numeric
 
